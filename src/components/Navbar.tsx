@@ -1,6 +1,6 @@
 import { FC, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Globe, ChevronRight } from "lucide-react";
+import { Globe, ChevronRight, LogOut } from "lucide-react"; // Added LogOut icon
 
 interface NavLinkProps {
   to: string;
@@ -35,7 +35,11 @@ const NavLink: FC<NavLinkProps> = ({
 
 type Language = "en" | "ru";
 
-const Navbar: FC = () => {
+interface NavbarProps {
+  onLogout: () => void; // Added onLogout prop
+}
+
+const Navbar: FC<NavbarProps> = ({ onLogout }) => {
   const [darkMode] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
   const [language, setLanguage] = useState<Language>("en");
@@ -58,6 +62,7 @@ const Navbar: FC = () => {
       executiveDashboard: "Executive Dashboard",
       language: "Language",
       theme: "Theme",
+      logout: "Logout",
     },
     ru: {
       dashboard: "Панель управления",
@@ -70,6 +75,7 @@ const Navbar: FC = () => {
       executiveDashboard: "Панель руководителя",
       language: "Язык",
       theme: "Тема",
+      logout: "Выйти",
     },
   };
 
@@ -323,6 +329,19 @@ const Navbar: FC = () => {
             {!collapsed && (
               <span>{language === "en" ? "English" : "Русский"}</span>
             )}
+          </div>
+        </div>
+
+        {/* Logout Button */}
+        <div
+          className={`flex items-center ${
+            collapsed ? "justify-center" : "justify-between"
+          } px-4 py-3 rounded-lg text-gray-300 hover:bg-indigo-500/20 cursor-pointer`}
+          onClick={onLogout}
+        >
+          <div className="flex items-center gap-3">
+            <LogOut className="h-5 w-5" />
+            {!collapsed && <span>{t.logout}</span>}
           </div>
         </div>
       </div>

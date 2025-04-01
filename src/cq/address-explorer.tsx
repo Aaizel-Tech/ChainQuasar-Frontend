@@ -450,7 +450,7 @@ const AddressExplorer = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full mx-auto">
           {/* Address Overview */}
           <div className="bg-white rounded-lg shadow mb-6 p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">

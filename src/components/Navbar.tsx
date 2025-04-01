@@ -318,7 +318,7 @@ const Navbar: FC<NavbarProps> = ({ onLogout }) => {
         }`}
       >
         {/* Language Toggle */}
-        <div
+        {/* <div
           className={`flex items-center ${
             collapsed ? "justify-center" : "justify-between"
           } px-4 py-3 rounded-lg text-gray-300 hover:bg-indigo-500/20 cursor-pointer`}
@@ -330,7 +330,7 @@ const Navbar: FC<NavbarProps> = ({ onLogout }) => {
               <span>{language === "en" ? "English" : "Русский"}</span>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Logout Button */}
         <div

@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   ArrowLeft,
   ExternalLink,
-  ChevronRight,
   AlertTriangle,
-  Calendar,
   Clock,
   DollarSign,
   Hash,
@@ -307,7 +305,7 @@ const TransactionExplorer = () => {
 
       {/* Main Content */}
       <main className="flex-1 p-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="w-full mx-auto">
           {/* Transaction Overview */}
           <div className="bg-white rounded-lg shadow mb-6 p-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">

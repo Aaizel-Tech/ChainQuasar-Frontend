@@ -17,7 +17,6 @@ import {
   AreaChart,
 } from "recharts";
 
-import SanctionsComplianceWidget from "./sanctioncompliance";
 const ChainQuasarExecutiveDashboard = () => {
   const [selectedCurrency, setSelectedCurrency] = useState("RUB");
   const [selectedTimeframe, setSelectedTimeframe] = useState("30d");
@@ -25,60 +24,9 @@ const ChainQuasarExecutiveDashboard = () => {
 
   // Translations for dashboard elements
   const translations = {
-    ru: {
-      title: "ChainQuasar: Аналитика блокчейна",
-      subtitle: "Панель мониторинга финансовых потоков",
-      overview: "Обзор рынка",
-      riskAnalysis: "Анализ рисков",
-      transactions: "Транзакции",
-      entities: "Сущности",
-      corridors: "Финансовые коридоры",
-      compliance: "Регуляторный контроль",
-      darkweb: "Мониторинг даркнет",
-      sanctions: "Проверка санкций",
-      highRisk: "Высокий риск",
-      mediumRisk: "Средний риск",
-      lowRisk: "Низкий риск",
-      noRisk: "Без риска",
-      inbound: "Входящие",
-      outbound: "Исходящие",
-      exchange: "Биржа",
-      mixer: "Миксер",
-      service: "Сервис",
-      institution: "Финансовое учреждение",
-      viewDetails: "Подробнее",
-      transactionVolume: "Объем транзакций",
-      riskDistribution: "Распределение рисков",
-      dataSovereignty: "Суверенитет данных",
-      alerts: "Оповещения",
-      lastUpdated: "Последнее обновление",
-      totalMonitored: "Всего под мониторингом",
-      sanctionsIdentified: "Выявлено санкций",
-      suspiciousActivity: "Подозрительная активность",
-      billion: "млрд",
-      million: "млн",
-      thousand: "тыс",
-      type: "Тип",
-      percentage: "Процент",
-      transactionsCol: "Транзакции",
-      distribution: "Распределение",
-      investigate: "Исследовать",
-      generateReport: "Сформировать отчет",
-      showAll: "Показать все",
-      showAllNetworks: "Все сети",
-      lastWeek: "прошлую неделю",
-      lastMonth: "прошлый месяц",
-      lastQuarter: "прошлый квартал",
-      newItems: "новых",
-      militaryGradeEncryption: "Военный уровень шифрования",
-      regulatoryCompliance: "Соответствие нормативным требованиям",
-      dataSovereigntyFooter:
-        "Обработка данных происходит в пределах вашей юрисдикции",
-      entries: "записей",
-    },
     en: {
-      title: "ChainQuasar: Blockchain Analytics",
-      subtitle: "Financial Flow Monitoring Dashboard",
+      title: "ChainQuasar",
+      subtitle: "Blockchain Analytics Dashboard",
       overview: "Market Overview",
       riskAnalysis: "Risk Analysis",
       transactions: "Transactions",
@@ -127,10 +75,61 @@ const ChainQuasarExecutiveDashboard = () => {
         "All data processing occurs within your jurisdiction",
       entries: "entries",
     },
+    ru: {
+      title: "ChainQuasar",
+      subtitle: "Аналитика блокчейна",
+      overview: "Обзор рынка",
+      riskAnalysis: "Анализ рисков",
+      transactions: "Транзакции",
+      entities: "Организации",
+      corridors: "Финансовые коридоры",
+      compliance: "Контроль регулирования",
+      darkweb: "Мониторинг темной сети",
+      sanctions: "Проверка санкций",
+      highRisk: "Высокий риск",
+      mediumRisk: "Средний риск",
+      lowRisk: "Низкий риск",
+      noRisk: "Без риска",
+      inbound: "Входящие",
+      outbound: "Исходящие",
+      exchange: "Биржа",
+      mixer: "Миксер",
+      service: "Сервис",
+      institution: "Финансовый институт",
+      viewDetails: "Подробнее",
+      transactionVolume: "Объем транзакций",
+      riskDistribution: "Распределение рисков",
+      dataSovereignty: "Суверенитет данных",
+      alerts: "Оповещения",
+      lastUpdated: "Последнее обновление",
+      totalMonitored: "Всего отслеживается",
+      sanctionsIdentified: "Выявлено санкций",
+      suspiciousActivity: "Подозрительная активность",
+      billion: "млрд",
+      million: "млн",
+      thousand: "тыс",
+      type: "Тип",
+      percentage: "Процент",
+      transactionsCol: "Транзакции",
+      distribution: "Распределение",
+      investigate: "Исследовать",
+      generateReport: "Сформировать отчет",
+      showAll: "Показать все",
+      showAllNetworks: "Все сети",
+      lastWeek: "прошлой недели",
+      lastMonth: "прошлого месяца",
+      lastQuarter: "прошлого квартала",
+      newItems: "новых",
+      militaryGradeEncryption: "Военный уровень шифрования",
+      regulatoryCompliance: "Соответствие нормативным требованиям",
+      dataSovereigntyFooter:
+        "Обработка данных происходит в пределах вашей юрисдикции",
+      entries: "записей",
+    },
   };
 
   // Use selected language for translations
-  const t = translations[selectedLanguage];
+  const t = translations[selectedLanguage] || translations.en;
 
   // Mock data for charts
   const currencySymbol =
@@ -147,10 +146,10 @@ const ChainQuasarExecutiveDashboard = () => {
   ];
 
   const riskData = [
-    { name: t.highRisk, value: 15.7, color: "#FF4D4F" },
-    { name: t.mediumRisk, value: 28.3, color: "#FF7A45" },
-    { name: t.lowRisk, value: 34.5, color: "#FFC53D" },
-    { name: t.noRisk, value: 21.5, color: "#52C41A" },
+    { name: t.highRisk, value: 15.7, color: "#FF4770" },
+    { name: t.mediumRisk, value: 28.3, color: "#FF9947" },
+    { name: t.lowRisk, value: 34.5, color: "#FFCB47" },
+    { name: t.noRisk, value: 21.5, color: "#47D163" },
   ];
 
   const corridorData = [
@@ -169,10 +168,10 @@ const ChainQuasarExecutiveDashboard = () => {
   ];
 
   const sanctionsData = [
-    { name: "OFAC", count: 154, color: "#FF4D4F" },
-    { name: "EU", count: 87, color: "#1890FF" },
-    { name: "UN", count: 63, color: "#722ED1" },
-    { name: "Local", count: 42, color: "#52C41A" },
+    { name: "OFAC", count: 154, color: "#FF4770" },
+    { name: "EU", count: 87, color: "#6C5DD3" },
+    { name: "UN", count: 63, color: "#7A73FF" },
+    { name: "Local", count: 42, color: "#47D163" },
   ];
 
   const alertsData = [
@@ -216,7 +215,7 @@ const ChainQuasarExecutiveDashboard = () => {
   const getRiskColor = (risk) => {
     switch (risk) {
       case "Severe":
-        return "bg-red-600 text-white";
+        return "bg-red-500 text-white";
       case "High":
         return "bg-orange-500 text-white";
       case "Medium":
@@ -232,13 +231,13 @@ const ChainQuasarExecutiveDashboard = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-gray-900 text-white p-4 rounded shadow-lg border border-gray-700 backdrop-blur-sm bg-opacity-80">
-          <p className="text-gray-300">{label}</p>
+        <div className="bg-slate-800 text-white p-3 rounded-lg shadow-lg border border-slate-700 backdrop-blur-md bg-opacity-90">
+          <p className="text-slate-300 font-medium">{label}</p>
           {payload.map((entry, index) => (
             <p
               key={index}
-              className="text-lg font-semibold"
-              style={{ color: entry.color }}
+              className="text-sm font-semibold mt-1"
+              style={{ color: entry.color || "#fff" }}
             >
               {`${entry.name}: ${entry.value} ${
                 entry.name === t.inbound || entry.name === t.outbound
@@ -267,110 +266,112 @@ const ChainQuasarExecutiveDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100">
+    <div className="min-h-screen bg-slate-100 text-slate-800">
       {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-900 to-blue-900 text-white p-6 shadow-xl">
-        <div className="container mx-auto flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">{t.title}</h1>
-            <p className="text-blue-200 mt-1">{t.subtitle}</p>
-          </div>
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex rounded-lg overflow-hidden shadow-lg">
-              <button
-                onClick={() => setSelectedLanguage("ru")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedLanguage === "ru"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                RU
-              </button>
-              <button
-                onClick={() => setSelectedLanguage("en")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedLanguage === "en"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                EN
-              </button>
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="mb-4 md:mb-0">
+              <h1 className="text-3xl font-bold">{t.title}</h1>
+              <p className="text-indigo-100 mt-1 opacity-80">{t.subtitle}</p>
             </div>
-            <div className="flex rounded-lg overflow-hidden shadow-lg">
-              <button
-                onClick={() => setSelectedCurrency("RUB")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedCurrency === "RUB"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                ₽ RUB
-              </button>
-              <button
-                onClick={() => setSelectedCurrency("KZT")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedCurrency === "KZT"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                ₸ KZT
-              </button>
-            </div>
-            <div className="flex rounded-lg overflow-hidden shadow-lg">
-              <button
-                onClick={() => setSelectedTimeframe("7d")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedTimeframe === "7d"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                7D
-              </button>
-              <button
-                onClick={() => setSelectedTimeframe("30d")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedTimeframe === "30d"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                30D
-              </button>
-              <button
-                onClick={() => setSelectedTimeframe("90d")}
-                className={`px-4 py-2 text-sm font-medium transition-all duration-200 ${
-                  selectedTimeframe === "90d"
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-                }`}
-              >
-                90D
-              </button>
-            </div>
-            <div className="flex items-center px-4 py-2 bg-blue-800 bg-opacity-50 rounded-lg">
-              <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-              <span className="text-sm text-blue-100">
-                {t.lastUpdated}: 3{" "}
-                {selectedLanguage === "ru" ? "мин назад" : "min ago"}
-              </span>
+            <div className="flex space-x-3">
+              <div className="bg-slate-800 bg-opacity-30 rounded-lg overflow-hidden flex">
+                <button
+                  onClick={() => setSelectedLanguage("ru")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedLanguage === "ru"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  RU
+                </button>
+                <button
+                  onClick={() => setSelectedLanguage("en")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedLanguage === "en"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+              <div className="bg-slate-800 bg-opacity-30 rounded-lg overflow-hidden flex">
+                <button
+                  onClick={() => setSelectedCurrency("RUB")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedCurrency === "RUB"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  ₽ RUB
+                </button>
+                <button
+                  onClick={() => setSelectedCurrency("KZT")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedCurrency === "KZT"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  ₸ KZT
+                </button>
+              </div>
+              <div className="bg-slate-800 bg-opacity-30 rounded-lg overflow-hidden flex">
+                <button
+                  onClick={() => setSelectedTimeframe("7d")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedTimeframe === "7d"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  7D
+                </button>
+                <button
+                  onClick={() => setSelectedTimeframe("30d")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedTimeframe === "30d"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  30D
+                </button>
+                <button
+                  onClick={() => setSelectedTimeframe("90d")}
+                  className={`px-3 py-2 text-sm font-medium ${
+                    selectedTimeframe === "90d"
+                      ? "bg-indigo-700 text-white"
+                      : "text-indigo-100 hover:bg-indigo-800 hover:bg-opacity-50"
+                  }`}
+                >
+                  90D
+                </button>
+              </div>
+              <div className="flex items-center px-3 py-2 bg-indigo-800 bg-opacity-30 rounded-lg">
+                <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                <span className="text-xs text-indigo-100">
+                  {t.lastUpdated}: 3{" "}
+                  {selectedLanguage === "ru" ? "мин назад" : "min ago"}
+                </span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* KPI Summary Cards */}
-      <div className="container mx-auto py-8 px-4">
+      <div className="container mx-auto px-4 -mt-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
+          <div className="bg-white rounded-xl shadow-md p-5 border border-slate-100 transform transition duration-300 hover:shadow-lg">
             <div className="flex items-center">
-              <div className="rounded-full bg-blue-100 dark:bg-blue-900 p-4 mr-5">
+              <div className="rounded-lg bg-indigo-100 p-3 mr-4">
                 <svg
-                  className="w-8 h-8 text-blue-600 dark:text-blue-400"
+                  className="w-7 h-7 text-indigo-600"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -385,18 +386,16 @@ const ChainQuasarExecutiveDashboard = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                <p className="text-slate-500 text-sm font-medium">
                   {t.totalMonitored}
                 </p>
-                <div className="flex items-end mt-1">
-                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    42.8
-                  </h2>
-                  <p className="ml-2 text-xl text-gray-600 dark:text-gray-300">
+                <div className="flex items-baseline mt-1">
+                  <h2 className="text-3xl font-bold text-slate-900">42.8</h2>
+                  <p className="ml-2 text-lg text-slate-600">
                     {t.billion} {currencySymbol}
                   </p>
                 </div>
-                <p className="text-green-500 dark:text-green-400 text-sm font-medium mt-2 flex items-center">
+                <p className="text-green-500 text-sm font-medium mt-2 flex items-center">
                   <svg
                     className="w-4 h-4 mr-1"
                     fill="currentColor"
@@ -420,11 +419,11 @@ const ChainQuasarExecutiveDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
+          <div className="bg-white rounded-xl shadow-md p-5 border border-slate-100 transform transition duration-300 hover:shadow-lg">
             <div className="flex items-center">
-              <div className="rounded-full bg-red-100 dark:bg-red-900 p-4 mr-5">
+              <div className="rounded-lg bg-red-100 p-3 mr-4">
                 <svg
-                  className="w-8 h-8 text-red-600 dark:text-red-400"
+                  className="w-7 h-7 text-red-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -439,18 +438,14 @@ const ChainQuasarExecutiveDashboard = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                <p className="text-slate-500 text-sm font-medium">
                   {t.sanctionsIdentified}
                 </p>
-                <div className="flex items-end mt-1">
-                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    346
-                  </h2>
-                  <p className="ml-2 text-xl text-gray-600 dark:text-gray-300">
-                    {selectedLanguage === "ru" ? t.entries : t.entries}
-                  </p>
+                <div className="flex items-baseline mt-1">
+                  <h2 className="text-3xl font-bold text-slate-900">346</h2>
+                  <p className="ml-2 text-lg text-slate-600">{t.entries}</p>
                 </div>
-                <p className="text-red-500 dark:text-red-400 text-sm font-medium mt-2 flex items-center">
+                <p className="text-red-500 text-sm font-medium mt-2 flex items-center">
                   <svg
                     className="w-4 h-4 mr-1"
                     fill="currentColor"
@@ -474,11 +469,11 @@ const ChainQuasarExecutiveDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700 transition-all duration-300 hover:shadow-xl">
+          <div className="bg-white rounded-xl shadow-md p-5 border border-slate-100 transform transition duration-300 hover:shadow-lg">
             <div className="flex items-center">
-              <div className="rounded-full bg-orange-100 dark:bg-orange-900 p-4 mr-5">
+              <div className="rounded-lg bg-orange-100 p-3 mr-4">
                 <svg
-                  className="w-8 h-8 text-orange-600 dark:text-orange-400"
+                  className="w-7 h-7 text-orange-500"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -493,18 +488,16 @@ const ChainQuasarExecutiveDashboard = () => {
                 </svg>
               </div>
               <div>
-                <p className="text-gray-500 dark:text-gray-400 text-sm font-medium">
+                <p className="text-slate-500 text-sm font-medium">
                   {t.suspiciousActivity}
                 </p>
-                <div className="flex items-end mt-1">
-                  <h2 className="text-4xl font-bold text-gray-900 dark:text-white">
-                    7.2
-                  </h2>
-                  <p className="ml-2 text-xl text-gray-600 dark:text-gray-300">
+                <div className="flex items-baseline mt-1">
+                  <h2 className="text-3xl font-bold text-slate-900">7.2</h2>
+                  <p className="ml-2 text-lg text-slate-600">
                     {t.billion} {currencySymbol}
                   </p>
                 </div>
-                <p className="text-orange-500 dark:text-orange-400 text-sm font-medium mt-2 flex items-center">
+                <p className="text-orange-500 text-sm font-medium mt-2 flex items-center">
                   <svg
                     className="w-4 h-4 mr-1"
                     fill="currentColor"
@@ -531,19 +524,19 @@ const ChainQuasarExecutiveDashboard = () => {
       </div>
 
       {/* Main Dashboard Content */}
-      <div className="container mx-auto pb-12 px-4">
+      <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Transaction Volume Chart */}
-          <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-5 border border-slate-100">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-lg font-semibold text-slate-900">
                 {t.transactionVolume}
               </h2>
               <div className="flex items-center">
-                <span className="text-gray-600 dark:text-gray-300 mr-2">
+                <span className="text-slate-500 mr-2 text-sm">
                   {selectedLanguage === "ru" ? "Показать:" : "Show:"}
                 </span>
-                <select className="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-lg px-3 py-1.5 text-sm focus:ring-blue-500 focus:border-blue-500 outline-none">
+                <select className="bg-slate-50 border border-slate-200 text-slate-700 rounded-lg px-2 py-1 text-sm focus:ring-indigo-500 focus:border-indigo-500 outline-none">
                   <option>{t.showAllNetworks}</option>
                   <option>Bitcoin</option>
                   <option>Ethereum</option>
@@ -558,26 +551,25 @@ const ChainQuasarExecutiveDashboard = () => {
               >
                 <defs>
                   <linearGradient id="colorVolume" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6366F1" stopOpacity={0.8} />
-                    <stop offset="95%" stopColor="#6366F1" stopOpacity={0} />
+                    <stop offset="5%" stopColor="#7A73FF" stopOpacity={0.8} />
+                    <stop offset="95%" stopColor="#7A73FF" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid
                   strokeDasharray="3 3"
                   vertical={false}
-                  stroke="#374151"
-                  opacity={0.1}
+                  stroke="#E2E8F0"
                 />
                 <XAxis
                   dataKey="name"
-                  tick={{ fill: "#6B7280" }}
-                  axisLine={{ stroke: "#9CA3AF", strokeWidth: 0.5 }}
-                  tickLine={{ stroke: "#9CA3AF" }}
+                  tick={{ fill: "#64748B" }}
+                  axisLine={{ stroke: "#CBD5E1", strokeWidth: 0.5 }}
+                  tickLine={{ stroke: "#CBD5E1" }}
                 />
                 <YAxis
-                  tick={{ fill: "#6B7280" }}
-                  axisLine={{ stroke: "#9CA3AF", strokeWidth: 0.5 }}
-                  tickLine={{ stroke: "#9CA3AF" }}
+                  tick={{ fill: "#64748B" }}
+                  axisLine={{ stroke: "#CBD5E1", strokeWidth: 0.5 }}
+                  tickLine={{ stroke: "#CBD5E1" }}
                   tickFormatter={(value) => `${value} ${t.billion}`}
                 />
                 <Tooltip content={<CustomTooltip />} />
@@ -589,15 +581,15 @@ const ChainQuasarExecutiveDashboard = () => {
                 <Area
                   type="monotone"
                   dataKey={selectedCurrency}
-                  stroke="#6366F1"
-                  strokeWidth={3}
+                  stroke="#7A73FF"
+                  strokeWidth={2}
                   fillOpacity={1}
                   fill="url(#colorVolume)"
                   activeDot={{
-                    r: 8,
-                    stroke: "#4F46E5",
+                    r: 6,
+                    stroke: "#6C5DD3",
                     strokeWidth: 2,
-                    fill: "#6366F1",
+                    fill: "#7A73FF",
                   }}
                 />
               </AreaChart>
@@ -605,8 +597,10 @@ const ChainQuasarExecutiveDashboard = () => {
           </div>
 
           {/* Risk Distribution */}
-          <div className="bg-white rounded-lg shadow p-4">
-            <h2 className="text-lg font-semibold mb-4">{t.riskDistribution}</h2>
+          <div className="bg-white rounded-xl shadow-md p-5 border border-slate-100">
+            <h2 className="text-lg font-semibold text-slate-900 mb-4">
+              {t.riskDistribution}
+            </h2>
             <div className="flex flex-col items-center">
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
@@ -623,10 +617,13 @@ const ChainQuasarExecutiveDashboard = () => {
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`${value}%`, ""]} />
+                  <Tooltip
+                    formatter={(value) => [`${value}%`, ""]}
+                    content={<CustomTooltip />}
+                  />
                 </PieChart>
               </ResponsiveContainer>
-              <div className="grid grid-cols-2 gap-2 w-full mt-4">
+              <div className="grid grid-cols-2 gap-2 w-full mt-2">
                 {riskData.map((item, index) => (
                   <div key={index} className="flex items-center">
                     <div
@@ -634,8 +631,10 @@ const ChainQuasarExecutiveDashboard = () => {
                       style={{ backgroundColor: item.color }}
                     ></div>
                     <div className="text-sm flex justify-between w-full">
-                      <span>{item.name}</span>
-                      <span className="font-semibold">{item.value}%</span>
+                      <span className="text-slate-700">{item.name}</span>
+                      <span className="font-semibold text-slate-900">
+                        {item.value}%
+                      </span>
                     </div>
                   </div>
                 ))}

@@ -1,11 +1,8 @@
-import React from "react";
 import {
   LineChart,
   Line,
   BarChart,
   Bar,
-  PieChart,
-  Pie,
   Cell,
   ResponsiveContainer,
   XAxis,
@@ -21,13 +18,13 @@ import RiskSummaryWidget from "./risksummarydata";
 
 const TransactionVolumeWidget = () => {
   const volumeData = [
-    { name: "Sep", bitcoin: 2780, ethereum: 3908, tron: 1400 },
-    { name: "Oct", bitcoin: 1890, ethereum: 4800, tron: 1700 },
-    { name: "Nov", bitcoin: 2390, ethereum: 3800, tron: 2000 },
-    { name: "Dec", bitcoin: 3490, ethereum: 4300, tron: 2200 },
-    { name: "Jan", bitcoin: 4000, ethereum: 2400, tron: 800 },
-    { name: "Feb", bitcoin: 3000, ethereum: 2800, tron: 1100 },
-    { name: "Mar", bitcoin: 2000, ethereum: 3200, tron: 1300 },
+    { name: "Sep", bitcoin: 2340000, ethereum: 8990000, solana: 12301000 },
+    { name: "Oct", bitcoin: 2560000, ethereum: 9660000, solana: 13362000 },
+    { name: "Nov", bitcoin: 4160000, ethereum: 19800000, solana: 20947000 },
+    { name: "Dec", bitcoin: 4410000, ethereum: 18500000, solana: 17811000 },
+    { name: "Jan", bitcoin: 2720000, ethereum: 15810000, solana: 23440000 },
+    { name: "Feb", bitcoin: 2400000, ethereum: 21580000, solana: 19101000 },
+    { name: "Mar", bitcoin: 2370000, ethereum: 19120000, solana: 21236000 },
   ];
 
   return (
@@ -60,7 +57,7 @@ const TransactionVolumeWidget = () => {
 
           <Line
             type="monotone"
-            dataKey="tron"
+            dataKey="solana"
             stroke="#eb0029"
             strokeWidth={2}
           />
@@ -325,8 +322,7 @@ const FilterBar = () => (
           <option>All Chains</option>
           <option>Bitcoin</option>
           <option>Ethereum</option>
-
-          <option>Tron</option>
+          <option>Solana</option>
         </select>
         <select className="border rounded-lg px-3 py-2">
           <option>All Entity Types</option>

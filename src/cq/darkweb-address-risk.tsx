@@ -184,7 +184,7 @@ const AddressRiskView = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
+    <div className=" min-h-screen bg-gray-50 w-full">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 px-4 py-3">
         <div className="flex items-center">
@@ -204,7 +204,7 @@ const AddressRiskView = () => {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
           </div>
         ) : (
-          <div className="max-w-4xl mx-auto">
+          <div className="w-full mx-auto">
             {/* Risk Summary */}
             <div className="bg-white rounded-lg shadow mb-6 p-6">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">

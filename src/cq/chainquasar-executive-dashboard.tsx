@@ -1,7 +1,5 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   PieChart,
@@ -269,7 +267,7 @@ const ChainQuasarExecutiveDashboard = () => {
     <div className="min-h-screen bg-slate-100 text-slate-800">
       {/* Header */}
       <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-4 py-6 ">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h1 className="text-3xl font-bold">{t.title}</h1>

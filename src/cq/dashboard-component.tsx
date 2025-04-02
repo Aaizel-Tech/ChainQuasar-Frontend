@@ -307,11 +307,6 @@ const BlockchainAnalyticsDashboard = () => {
             </button>
           </div>
         </div>
-        <div className="mt-2 text-sm text-gray-600 flex items-center">
-          <FileText className="h-4 w-4 mr-1" />
-          Currently analyzing:{" "}
-          <span className="font-medium ml-1">/profile/abc.csv</span>
-        </div>
       </header>
 
       {/* Main Content */}

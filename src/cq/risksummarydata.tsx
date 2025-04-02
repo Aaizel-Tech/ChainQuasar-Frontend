@@ -19,7 +19,7 @@ const RiskSummaryWidget = () => {
   }));
 
   return (
-    <div className="bg-white w-half rounded-lg shadow-md p-6 border border-gray-100">
+    <div className="bg-white w-half rounded-lg shadow-md p-6 border border-gray-100 h-full">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center">
           <AlertTriangle className="text-orange-500 mr-2" size={20} />

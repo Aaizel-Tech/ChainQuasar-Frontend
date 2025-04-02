@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
+import { Maximize2, Minimize2, Info, X } from "lucide-react";
 
 // Mock data for the transaction network
 const mockNetworkData = {
@@ -129,6 +130,7 @@ const NetworkVisualizationWidget = () => {
   const [hopLevel, setHopLevel] = useState("2");
   const [selectedNode, setSelectedNode] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showLegend, setShowLegend] = useState(true);
 
   // Function to toggle fullscreen mode
   const toggleFullscreen = () => {
@@ -152,7 +154,7 @@ const NetworkVisualizationWidget = () => {
 
     // Define container dimensions
     const containerWidth = svgRef.current.clientWidth;
-    const containerHeight = isFullscreen ? window.innerHeight * 0.8 : 230;
+    const containerHeight = isFullscreen ? window.innerHeight * 0.8 : 180;
 
     // Create SVG
     const svg = d3
@@ -160,13 +162,91 @@ const NetworkVisualizationWidget = () => {
       .attr("width", containerWidth)
       .attr("height", containerHeight);
 
-    // Create color scale for node types
+    // Add a subtle grid background pattern
+    const defs = svg.append("defs");
+
+    // Create gradient for background
+    const gradient = defs
+      .append("linearGradient")
+      .attr("id", "network-bg-gradient")
+      .attr("x1", "0%")
+      .attr("y1", "0%")
+      .attr("x2", "100%")
+      .attr("y2", "100%");
+
+    gradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#0a0f29")
+      .attr("stop-opacity", 0.02);
+
+    gradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#111827")
+      .attr("stop-opacity", 0.08);
+
+    // Add background rectangle with gradient
+    svg
+      .append("rect")
+      .attr("width", containerWidth)
+      .attr("height", containerHeight)
+      .attr("fill", "url(#network-bg-gradient)");
+
+    // Create grid pattern
+    defs
+      .append("pattern")
+      .attr("id", "grid")
+      .attr("width", 20)
+      .attr("height", 20)
+      .attr("patternUnits", "userSpaceOnUse")
+      .append("path")
+      .attr("d", "M 20 0 L 0 0 0 20")
+      .attr("fill", "none")
+      .attr("stroke", "#334155")
+      .attr("stroke-width", "0.5")
+      .attr("stroke-opacity", "0.2");
+
+    // Add grid overlay
+    svg
+      .append("rect")
+      .attr("width", containerWidth)
+      .attr("height", containerHeight)
+      .attr("fill", "url(#grid)");
+
+    // Create glow effect for nodes
+    const nodeGlow = defs
+      .append("filter")
+      .attr("id", "node-glow")
+      .attr("x", "-50%")
+      .attr("y", "-50%")
+      .attr("width", "200%")
+      .attr("height", "200%");
+
+    nodeGlow
+      .append("feGaussianBlur")
+      .attr("stdDeviation", "3")
+      .attr("result", "blur");
+
+    nodeGlow
+      .append("feComposite")
+      .attr("in", "SourceGraphic")
+      .attr("in2", "blur")
+      .attr("operator", "over");
+
+    // Create color scale for node types with blockchain theme colors
     const typeColorScale = d3
       .scaleOrdinal()
       .domain(["exchange", "mixer", "highrisk", "wallet"])
-      .range(["#1890ff", "#722ed1", "#f5222d", "#52c41a"]);
+      .range(["#3498db", "#9b59b6", "#e74c3c", "#2ecc71"]);
 
-    // Define arrow markers for directed links
+    // Risk color scale
+    const riskColorScale = d3
+      .scaleOrdinal()
+      .domain(["low", "medium", "high", "severe"])
+      .range(["#2ecc71", "#f39c12", "#e74c3c", "#c0392b"]);
+
+    // Define arrow markers for directed links with better styling
     svg
       .append("defs")
       .append("marker")
@@ -179,9 +259,9 @@ const NetworkVisualizationWidget = () => {
       .attr("orient", "auto")
       .append("path")
       .attr("d", "M0,-5L10,0L0,5")
-      .attr("fill", "#999");
+      .attr("fill", "#64748b");
 
-    // Create simulation
+    // Create simulation with improved physics
     const simulation = d3
       .forceSimulation(currentNetworkData.nodes)
       .force(
@@ -189,25 +269,30 @@ const NetworkVisualizationWidget = () => {
         d3
           .forceLink(currentNetworkData.links)
           .id((d) => d.id)
-          .distance((d) => 80 / d.value)
+          .distance((d) => 100 / (d.value * 0.8))
       )
-      .force("charge", d3.forceManyBody().strength(-300))
+      .force("charge", d3.forceManyBody().strength(-400))
       .force("center", d3.forceCenter(containerWidth / 2, containerHeight / 2))
       .force(
         "collide",
-        d3.forceCollide().radius((d) => d.size * 2)
+        d3.forceCollide().radius((d) => d.size * 2.2)
       );
 
-    // Create links
-    const link = svg
-      .append("g")
+    // Create link groups for better styling
+    const linkGroup = svg.append("g").attr("class", "links");
+
+    // Create links with gradient effect
+    const link = linkGroup
       .selectAll("line")
       .data(currentNetworkData.links)
       .enter()
       .append("line")
-      .attr("stroke", "#999")
+      .attr("stroke", "#64748b")
       .attr("stroke-opacity", 0.6)
-      .attr("stroke-width", (d) => Math.sqrt(d.value))
+      .attr("stroke-width", (d) => Math.sqrt(d.value) * 1.2)
+      .attr("stroke-dasharray", (d) =>
+        d.direction === "outgoing" ? "4, 2" : null
+      )
       .attr("marker-end", (d) =>
         d.direction === "outgoing" ? "url(#arrowhead)" : null
       )
@@ -215,17 +300,55 @@ const NetworkVisualizationWidget = () => {
         d.direction === "incoming" ? "url(#arrowhead)" : null
       );
 
-    // Create nodes
-    const node = svg
-      .append("g")
-      .selectAll("circle")
+    // Add transaction amount labels to links
+    const linkLabels = linkGroup
+      .selectAll("text")
+      .data(currentNetworkData.links)
+      .enter()
+      .append("text")
+      .attr("class", "link-label")
+      .attr("font-size", "9px")
+      .attr("fill", "#94a3b8")
+      .attr("text-anchor", "middle")
+      .text((d) => `${d.value} ETH`);
+
+    // Create nodes with better styling
+    const nodeGroup = svg.append("g").attr("class", "nodes");
+
+    // Add node highlight rings
+    const nodeRings = nodeGroup
+      .selectAll(".node-ring")
       .data(currentNetworkData.nodes)
       .enter()
       .append("circle")
+      .attr("class", "node-ring")
+      .attr("r", (d) => d.size * 1.4)
+      .attr("fill", "none")
+      .attr("stroke", (d) => typeColorScale(d.type))
+      .attr("stroke-opacity", 0.3)
+      .attr("stroke-width", 2);
+
+    // Add main nodes
+    const node = nodeGroup
+      .selectAll(".node")
+      .data(currentNetworkData.nodes)
+      .enter()
+      .append("circle")
+      .attr("class", "node")
       .attr("r", (d) => d.size)
       .attr("fill", (d) => typeColorScale(d.type))
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1.5)
+      .attr("stroke", (d) => riskColorScale(d.risk))
+      .attr("stroke-width", 2)
+      .attr("filter", (d) => (d.id === "main" ? "url(#node-glow)" : null))
+      .on("mouseover", function (event, d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", d.size * 1.2);
+      })
+      .on("mouseout", function (event, d) {
+        d3.select(this).transition().duration(200).attr("r", d.size);
+      })
       .on("click", (event, d) => {
         setSelectedNode(d);
       })
@@ -237,9 +360,8 @@ const NetworkVisualizationWidget = () => {
           .on("end", dragended)
       );
 
-    // Add node labels
-    const nodeLabels = svg
-      .append("g")
+    // Add node labels with better styling
+    const nodeLabels = nodeGroup
       .selectAll("text")
       .data(currentNetworkData.nodes)
       .enter()
@@ -249,8 +371,10 @@ const NetworkVisualizationWidget = () => {
       .text((d) =>
         d.id === "main" ? d.name : containerWidth > 500 ? d.name : ""
       )
-      .attr("font-size", "10px")
-      .attr("pointer-events", "none");
+      .attr("font-size", "11px")
+      .attr("fill", "#e2e8f0")
+      .attr("pointer-events", "none")
+      .attr("text-shadow", "0 1px 3px rgba(0,0,0,0.7)");
 
     // Update simulation on tick
     simulation.on("tick", () => {
@@ -259,6 +383,10 @@ const NetworkVisualizationWidget = () => {
         .attr("y1", (d) => d.source.y)
         .attr("x2", (d) => d.target.x)
         .attr("y2", (d) => d.target.y);
+
+      linkLabels
+        .attr("x", (d) => (d.source.x + d.target.x) / 2)
+        .attr("y", (d) => (d.source.y + d.target.y) / 2);
 
       node
         .attr("cx", (d) => {
@@ -273,6 +401,8 @@ const NetworkVisualizationWidget = () => {
             Math.min(containerHeight - d.size, d.y)
           ));
         });
+
+      nodeRings.attr("cx", (d) => d.x).attr("cy", (d) => d.y);
 
       nodeLabels.attr("x", (d) => d.x).attr("y", (d) => d.y);
     });
@@ -318,115 +448,186 @@ const NetworkVisualizationWidget = () => {
 
   return (
     <div
-      className={`bg-white rounded-lg shadow ${
-        isFullscreen ? "fixed inset-0 z-50 m-4" : "p-4"
+      className={`bg-slate-900 rounded-xl shadow-lg border border-slate-800 ${
+        isFullscreen ? "fixed inset-0 z-50 m-0 rounded-none" : "h-80"
       }`}
     >
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg font-semibold">Transaction Network Analysis</h2>
-        <div className="flex space-x-2">
-          <button
-            className={`${
-              hopLevel === "1"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-800"
-            } px-2 py-1 rounded text-xs`}
-            onClick={() => handleHopChange("1")}
-          >
-            1 Hop
-          </button>
-          <button
-            className={`${
-              hopLevel === "2"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-800"
-            } px-2 py-1 rounded text-xs`}
-            onClick={() => handleHopChange("2")}
-          >
-            2 Hops
-          </button>
-          <button
-            className={`${
-              hopLevel === "3"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-100 text-gray-800"
-            } px-2 py-1 rounded text-xs`}
-            onClick={() => handleHopChange("3")}
-          >
-            3 Hops
-          </button>
+      <div className="flex justify-between items-center p-4 border-b border-slate-800">
+        <div className="flex items-center space-x-2">
+          <div className="w-3 h-3 rounded-full bg-blue-500 animate-pulse"></div>
+          <h2 className="text-lg font-semibold text-white">
+            Transaction Network Analysis
+          </h2>
+        </div>
+
+        <div className="flex items-center space-x-4">
+          <div className="flex bg-slate-800 rounded-lg p-1">
+            <button
+              className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+                hopLevel === "1"
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "text-slate-300 hover:text-white"
+              }`}
+              onClick={() => handleHopChange("1")}
+            >
+              1 Hop
+            </button>
+            <button
+              className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+                hopLevel === "2"
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "text-slate-300 hover:text-white"
+              }`}
+              onClick={() => handleHopChange("2")}
+            >
+              2 Hops
+            </button>
+            <button
+              className={`px-3 py-1 rounded text-xs font-medium transition-all ${
+                hopLevel === "3"
+                  ? "bg-blue-600 text-white shadow-lg"
+                  : "text-slate-300 hover:text-white"
+              }`}
+              onClick={() => handleHopChange("3")}
+            >
+              3 Hops
+            </button>
+          </div>
+
+          <div className="flex space-x-2">
+            <button
+              className="p-1 text-slate-400 hover:text-white transition-colors rounded-md"
+              onClick={() => setShowLegend(!showLegend)}
+              title="Toggle Legend"
+            >
+              <Info size={18} />
+            </button>
+            <button
+              className="p-1 text-slate-400 hover:text-white transition-colors rounded-md"
+              onClick={toggleFullscreen}
+              title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+            >
+              {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
+          </div>
         </div>
       </div>
 
       <div
-        className="border rounded-lg p-2 bg-gray-50"
-        style={{ height: isFullscreen ? "80vh" : "230px" }}
+        className="relative"
+        style={{ height: isFullscreen ? "calc(100vh - 190px)" : "280px" }}
       >
-        <svg ref={svgRef} className="w-full h-full"></svg>
+        <svg ref={svgRef} className="w-full h-half"></svg>
 
         {selectedNode && (
           <div
-            className="absolute bg-white border rounded-lg p-3 shadow-lg"
-            style={{ bottom: "10px", right: "10px", maxWidth: "250px" }}
+            className="absolute bg-slate-800 border border-slate-700 rounded-lg p-4 shadow-lg text-white"
+            style={{ bottom: "20px", right: "20px", maxWidth: "280px" }}
           >
-            <div className="flex justify-between">
-              <h3 className="font-medium">{selectedNode.name}</h3>
+            <div className="flex justify-between items-center mb-2">
+              <div className="flex items-center space-x-2">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{
+                    backgroundColor:
+                      selectedNode.type === "exchange"
+                        ? "#3498db"
+                        : selectedNode.type === "mixer"
+                        ? "#9b59b6"
+                        : selectedNode.type === "highrisk"
+                        ? "#e74c3c"
+                        : "#2ecc71",
+                  }}
+                ></div>
+                <h3 className="font-medium">{selectedNode.name}</h3>
+              </div>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-gray-500 hover:text-gray-700"
+                className="text-slate-400 hover:text-white transition-colors"
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
-            <div className="text-sm mt-2">
-              <div>
-                <span className="text-gray-500">Type:</span>{" "}
-                {selectedNode.type.charAt(0).toUpperCase() +
-                  selectedNode.type.slice(1)}
+            <div className="text-sm space-y-2">
+              <div className="flex justify-between py-1 border-b border-slate-700">
+                <span className="text-slate-400">Type</span>
+                <span className="font-medium">
+                  {selectedNode.type.charAt(0).toUpperCase() +
+                    selectedNode.type.slice(1)}
+                </span>
               </div>
-              <div>
-                <span className="text-gray-500">Risk:</span>{" "}
-                {selectedNode.risk.charAt(0).toUpperCase() +
-                  selectedNode.risk.slice(1)}
+              <div className="flex justify-between py-1 border-b border-slate-700">
+                <span className="text-slate-400">Risk Level</span>
+                <span
+                  className={`font-medium ${
+                    selectedNode.risk === "high" ||
+                    selectedNode.risk === "severe"
+                      ? "text-red-400"
+                      : selectedNode.risk === "medium"
+                      ? "text-yellow-400"
+                      : "text-green-400"
+                  }`}
+                >
+                  {selectedNode.risk.charAt(0).toUpperCase() +
+                    selectedNode.risk.slice(1)}
+                </span>
               </div>
-              <div className="mt-2">
-                <button className="text-blue-600 text-xs">
+              <div className="flex justify-between py-1 border-b border-slate-700">
+                <span className="text-slate-400">Connection Count</span>
+                <span className="font-medium">
+                  {
+                    mockNetworkData.links.filter(
+                      (link) =>
+                        link.source === selectedNode.id ||
+                        link.target === selectedNode.id ||
+                        (typeof link.source === "object" &&
+                          link.source.id === selectedNode.id) ||
+                        (typeof link.target === "object" &&
+                          link.target.id === selectedNode.id)
+                    ).length
+                  }
+                </span>
+              </div>
+              <div className="mt-3 flex space-x-2">
+                <button className="bg-blue-600 hover:bg-blue-700 transition-colors text-white text-xs py-1 px-3 rounded-md flex-1">
                   View Transactions
+                </button>
+                <button className="bg-slate-700 hover:bg-slate-600 transition-colors text-white text-xs py-1 px-3 rounded-md flex-1">
+                  Track Address
                 </button>
               </div>
             </div>
           </div>
         )}
-      </div>
 
-      <div className="mt-2 text-right">
-        <button className="text-blue-600 text-sm" onClick={toggleFullscreen}>
-          {isFullscreen ? "Collapse View ↓" : "Expand View →"}
-        </button>
-      </div>
-
-      {isFullscreen && (
-        <div className="absolute bottom-4 left-4 right-4">
-          <div className="bg-white p-3 rounded-lg shadow flex justify-center space-x-8">
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-blue-500 mr-1"></div>
-              <span className="text-sm">Exchange</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-purple-500 mr-1"></div>
-              <span className="text-sm">Mixer</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-red-500 mr-1"></div>
-              <span className="text-sm">High Risk</span>
-            </div>
-            <div className="flex items-center">
-              <div className="w-4 h-4 rounded-full bg-green-500 mr-1"></div>
-              <span className="text-sm">Wallet</span>
+        {showLegend && (
+          <div className="absolute bottom-16 left-4 right-4">
+            <div className="bg-slate-800/90 backdrop-blur-sm p-3 rounded-lg shadow-lg border border-slate-700 flex flex-wrap justify-center gap-4">
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                <span className="text-xs text-slate-300">Exchanges</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                <span className="text-xs text-slate-300">Mixers</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
+                <span className="text-xs text-slate-300">High Risk</span>
+              </div>
+              <div className="flex items-center">
+                <div className="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                <span className="text-xs text-slate-300">Wallets</span>
+              </div>
+              <div className="flex items-center ml-4 pl-4 border-l border-slate-700">
+                <span className="text-xs text-slate-400">
+                  Hover nodes for details
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
